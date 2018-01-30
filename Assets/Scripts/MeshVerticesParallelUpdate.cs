@@ -6,6 +6,10 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
 {
     public int vertexCount = 20000;
 
+    [Range(0.05f, 1f)]
+    [SerializeField]
+    protected float m_Strength = 0.25f;
+
     NativeArray<Vector3> m_Vertices;
     NativeArray<Vector3> m_Normals;
     NativeArray<Vector2> m_Uv;
@@ -42,16 +46,18 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
 
         public float time;
 
+        public float strength;
+
         public void Execute(int i)
         {
             var vertex = vertices[i];
-            var noise = Vector3.one * Mathf.PerlinNoise(vertex.z, vertex.y);
-            var sine = Vector3.one * Mathf.Sin(time);
+            var perlin = Mathf.PerlinNoise(vertex.z, vertex.y) * strength;
+            var noise = Vector3.one * perlin;
+            var sine = Vector3.one * Mathf.Sin(time) * strength;
 
             vertex = vertex - sine + noise;
 
             vertices[i] = vertex;
-            //uv[i] = new Vector2(vertex.x, vertex.z);
         }
     }
 
@@ -60,7 +66,6 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
         m_JobHandle.Complete();
 
         m_Mesh.vertices = m_CalculateJob.vertices.ToArray();
-        //m_Mesh.uv = m_CalculateJob.uv.ToArray();
     }
 
     public void Update()
@@ -68,8 +73,8 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
         m_CalculateJob = new CalculateJob()
         {
             vertices = m_Vertices,
-            // uv = m_Uv,
-            time = Time.time
+            time = Time.time,
+            strength = m_Strength / 5f  // map .05-1 range to smaller real strength
         };
 
         m_JobHandle = m_CalculateJob.Schedule(m_Vertices.Length, 64);

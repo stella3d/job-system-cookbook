@@ -322,3 +322,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vertexCount: 20000
+  m_Strength: 0.328

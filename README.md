@@ -16,6 +16,8 @@ Note: examples in this repo use `LateUpdate()` as an easy way to handle completi
 
 10000 is the default number of items to have to iterate over to demonstrate how they perform at scale, but it's adjustable in the Inspector for each example.
 
+All examples demonstrate the use of persistently-allocated job memory.
+
 ### [Accelerate 10000 Cubes](Assets/Scripts/AccelerationParallelFor.cs)
 
 First determine velocities, then change positions based on those velocities.
@@ -32,7 +34,7 @@ Demonstrates running 2 independent jobs.
 
 Check a `Ray` for intersection with a large `Bounds` array in two steps.
 
-Demonstrates reducing an array of checks to a smaller list of results.
+Demonstrates reducing an array of checks to a smaller list, and using temporarily-allocated job memory. 
 
 ### [Point Cloud Generation & Processing](Assets/Scripts/PointCloudProcessing.cs)
 

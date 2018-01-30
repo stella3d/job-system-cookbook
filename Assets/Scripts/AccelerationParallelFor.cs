@@ -12,6 +12,7 @@ public class AccelerationParallelFor : BaseJobObjectExample
 
     PositionUpdateJob m_Job;
     AccelerationJob m_AccelJob;
+
     JobHandle m_JobHandle;
     JobHandle m_AccelJobHandle;
 
@@ -20,9 +21,14 @@ public class AccelerationParallelFor : BaseJobObjectExample
         m_Positions = new NativeArray<Vector3>(m_ObjectCount, Allocator.Persistent);
         m_Velocities = new NativeArray<Vector3>(m_ObjectCount, Allocator.Persistent);
 
+        m_Objects = SetupUtils.PlaceRandomCubes(m_ObjectCount, m_ObjectPlacementRadius);
+
         for (int i = 0; i < m_ObjectCount; i++)
         {
-            m_Positions[i] = m_Transforms[i].position;
+            var obj = m_Objects[i];
+            m_Transforms[i] = obj.transform;
+            m_Renderers[i] = obj.GetComponent<Renderer>();
+            m_Positions[i] = obj.transform.position;
         }
     }
 
@@ -35,7 +41,6 @@ public class AccelerationParallelFor : BaseJobObjectExample
 
         public float deltaTime;
 
-        // The code actually running on the job
         public void Execute(int i)
         {
             position[i] += velocity[i] * deltaTime;
@@ -51,7 +56,6 @@ public class AccelerationParallelFor : BaseJobObjectExample
 
         public float deltaTime;
 
-        // The code actually running on the job
         public void Execute(int i)
         {
             velocity[i] += (acceleration + i * accelerationMod) * deltaTime;

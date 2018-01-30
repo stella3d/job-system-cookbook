@@ -36,6 +36,8 @@ public static class SetupUtils
             cubes[i] = cube;
         }
 
+        GameObject.Destroy(cubeToCopy);
+
         return cubes;
     }
 

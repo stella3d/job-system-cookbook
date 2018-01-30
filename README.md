@@ -1,12 +1,14 @@
 C# Job System Cookbook
 =======================
 
-This is a repo of examples I've written to learn how to use the C# job system to write systems at scale, here for reference and sharing.
+This is a repo of examples I've written to learn how to use the C# job system to write systems at scale, here for reference and sharing.  
+
+The goal of this repo is making it clearer how you can _structure_ your data, _schedule_ your jobs, and use the results. 
+So, the examples use easy to understand problems & algorithms. 
 
 This doesn't (yet!) cover things related to using C# jobs with the upcoming Entity Component System.
 
 Each example script has a corresponding scene where it's set up.
-
 
 ## Examples
 

@@ -21,8 +21,6 @@ For a detailed look into how the C# job system works, please watch the [Unite Au
 
 Note: examples in this repo use `LateUpdate()` as an easy way to handle completing jobs later than we schedule them, but in real code you might want to schedule the jobs early in `Update` (using Script Execution Order maybe) so you can use the result later in the same frame.
 
-10000 is the default number of items to have to iterate over to demonstrate how they perform at scale, but it's adjustable in the Inspector for each example.
-
 All examples demonstrate the use of persistently-allocated job memory.
 
 ### [Change Mesh Vertices Every Frame](Assets/Scripts/MeshVerticesParallelUpdate.cs)

@@ -78,20 +78,6 @@ public class RayBoundsIntersection : BaseJobObjectExample
         }
     }
 
-    public void LateUpdate()
-    {
-        m_RayIntersectionListJobHandle.Complete();
-
-        var results = m_RayIntersectionListJob.results;
-        var resultCount = GetResultCount(results);
-
-        if (resultCount > 0)
-            Debug.Log(resultCount + " total intersections, first result: " + results[0]);
-
-        // make sure to dispose any temp allocations made for this job
-        m_RayIntersectionListJob.results.Dispose();
-    }
-
     public void Update()
     {
         // generate a new Ray to test against every frame
@@ -118,6 +104,20 @@ public class RayBoundsIntersection : BaseJobObjectExample
 
         m_RayIntersectionJobHandle = m_RayIntersectionJob.Schedule(m_NativeBounds.Length, 64);
         m_RayIntersectionListJobHandle = m_RayIntersectionListJob.Schedule(m_RayIntersectionJobHandle);
+    }
+
+    public void LateUpdate()
+    {
+        m_RayIntersectionListJobHandle.Complete();
+
+        var results = m_RayIntersectionListJob.results;
+        var resultCount = GetResultCount(results);
+
+        if (resultCount > 0)
+            Debug.Log(resultCount + " total intersections, first result: " + results[0]);
+
+        // make sure to dispose any temp allocations made for this job
+        m_RayIntersectionListJob.results.Dispose();
     }
 
     public int GetResultCount(NativeArray<Bounds> bounds)

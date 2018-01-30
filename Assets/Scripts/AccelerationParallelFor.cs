@@ -64,19 +64,6 @@ public class AccelerationParallelFor : BaseJobObjectExample
         }
     }
 
-    public void LateUpdate()
-    {
-        m_PositionJobHandle.Complete();
-
-        for (int i = 0; i < m_ObjectCount; i++)
-        {
-            // only actually set object's position if something is looking at it
-            // just an optimization so the performance depends more on the jobs
-            if(m_Renderers[i].isVisible)
-                m_Transforms[i].position = m_Job.position[i];
-        }
-    }
-
     public void Update()
     {
         m_AccelJob = new AccelerationJob()
@@ -96,6 +83,19 @@ public class AccelerationParallelFor : BaseJobObjectExample
 
         m_AccelJobHandle = m_AccelJob.Schedule(m_Positions.Length, 64);
         m_PositionJobHandle = m_Job.Schedule(m_Positions.Length, 64, m_AccelJobHandle);
+    }
+
+    public void LateUpdate()
+    {
+        m_PositionJobHandle.Complete();
+
+        for (int i = 0; i < m_ObjectCount; i++)
+        {
+            // only actually set object's position if something is looking at it
+            // just an optimization so the performance depends more on the jobs
+            if (m_Renderers[i].isVisible)
+                m_Transforms[i].position = m_Job.position[i];
+        }
     }
 
     private void OnDestroy()

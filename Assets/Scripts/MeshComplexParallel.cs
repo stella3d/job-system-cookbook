@@ -62,17 +62,6 @@ public class MeshComplexParallel : MonoBehaviour
         }
     }
 
-    public void LateUpdate()
-    {
-        m_JobHandle.Complete();
-
-        m_CalculateJob.vertices.CopyTo(m_ModifiedVertices);
-        m_CalculateJob.normals.CopyTo(m_ModifiedNormals);
-
-        m_Mesh.vertices = m_ModifiedVertices;
-        m_Mesh.normals = m_ModifiedNormals;
-    }
-
     public void Update()
     {
         m_CalculateJob = new CalculateJob()
@@ -85,6 +74,17 @@ public class MeshComplexParallel : MonoBehaviour
         };
 
         m_JobHandle = m_CalculateJob.Schedule(m_Vertices.Length, 64);
+    }
+
+    public void LateUpdate()
+    {
+        m_JobHandle.Complete();
+
+        m_CalculateJob.vertices.CopyTo(m_ModifiedVertices);
+        m_CalculateJob.normals.CopyTo(m_ModifiedNormals);
+
+        m_Mesh.vertices = m_ModifiedVertices;
+        m_Mesh.normals = m_ModifiedNormals;
     }
 
     private void OnDestroy()

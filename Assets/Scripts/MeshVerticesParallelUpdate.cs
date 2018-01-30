@@ -51,15 +51,6 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
         }
     }
 
-    public void LateUpdate()
-    {
-        m_JobHandle.Complete();
-
-        m_CalculateJob.vertices.CopyTo(m_ModifiedVertices);
-
-        m_Mesh.vertices = m_ModifiedVertices;
-    }
-
     public void Update()
     {
         m_CalculateJob = new CalculateJob()
@@ -70,6 +61,15 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
         };
 
         m_JobHandle = m_CalculateJob.Schedule(m_Vertices.Length, 64);
+    }
+
+    public void LateUpdate()
+    {
+        m_JobHandle.Complete();
+
+        m_CalculateJob.vertices.CopyTo(m_ModifiedVertices);
+
+        m_Mesh.vertices = m_ModifiedVertices;
     }
 
     private void OnDestroy()

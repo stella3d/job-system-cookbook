@@ -64,12 +64,6 @@ public class CheckBoundsParallelFor : BaseJobObjectExample
         }
     }
 
-    public void LateUpdate()
-    {
-        m_JobHandle.Complete();
-        m_IntersectionJobHandle.Complete();
-    }
-
     public void Update()
     {
         var point = Random.insideUnitSphere * 100f;
@@ -90,6 +84,12 @@ public class CheckBoundsParallelFor : BaseJobObjectExample
 
         m_JobHandle = m_Job.Schedule(m_Positions.Length, 64);
         m_IntersectionJobHandle = m_IntersectionJob.Schedule(m_NativeBounds.Length, 64);
+    }
+
+    public void LateUpdate()
+    {
+        m_JobHandle.Complete();
+        m_IntersectionJobHandle.Complete();
     }
 
     private void OnDestroy()

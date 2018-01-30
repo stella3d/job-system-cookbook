@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Jobs;
+using UnityEngine;
 
 public class MeshVerticesParallelUpdate : MonoBehaviour
 {
@@ -34,7 +34,7 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
     {
         public NativeArray<Vector3> vertices;
 
-        public float time;
+        public float sineTime;
 
         public float strength;
 
@@ -43,7 +43,7 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
             var vertex = vertices[i];
             var perlin = Mathf.PerlinNoise(vertex.z, vertex.y) * strength;
             var noise = Vector3.one * perlin;
-            var sine = Vector3.one * Mathf.Sin(time) * strength;
+            var sine = Vector3.one * sineTime * strength;
 
             vertex = vertex - sine + noise;
 
@@ -65,7 +65,7 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
         m_CalculateJob = new CalculateJob()
         {
             vertices = m_Vertices,
-            time = Time.time,
+            sineTime = Mathf.Sin(Time.time),
             strength = m_Strength / 5f  // map .05-1 range to smaller real strength
         };
 

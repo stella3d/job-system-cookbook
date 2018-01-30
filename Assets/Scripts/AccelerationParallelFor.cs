@@ -13,7 +13,7 @@ public class AccelerationParallelFor : BaseJobObjectExample
     PositionUpdateJob m_Job;
     AccelerationJob m_AccelJob;
 
-    JobHandle m_JobHandle;
+    JobHandle m_PositionJobHandle;
     JobHandle m_AccelJobHandle;
 
     protected void Start()
@@ -35,7 +35,7 @@ public class AccelerationParallelFor : BaseJobObjectExample
     struct PositionUpdateJob : IJobParallelFor
     {
         [ReadOnly]
-        public NativeArray<Vector3> velocity;
+        public NativeArray<Vector3> velocity;  // the velocities from AccelerationJob
 
         public NativeArray<Vector3> position;
 
@@ -58,17 +58,19 @@ public class AccelerationParallelFor : BaseJobObjectExample
 
         public void Execute(int i)
         {
+            // here, i'm intentionally using the index to affect acceleration (it looks cool),
+            // but generating velocities probably wouldn't be tied to index normally.
             velocity[i] += (acceleration + i * accelerationMod) * deltaTime;
         }
     }
 
     public void LateUpdate()
     {
-        m_JobHandle.Complete();
+        m_PositionJobHandle.Complete();
 
         for (int i = 0; i < m_ObjectCount; i++)
         {
-            // only update the transform if something is looking at it
+            // only actually set object's position if something is looking at it
             // just an optimization so the performance depends more on the jobs
             if(m_Renderers[i].isVisible)
                 m_Transforms[i].position = m_Job.position[i];
@@ -93,7 +95,7 @@ public class AccelerationParallelFor : BaseJobObjectExample
         };
 
         m_AccelJobHandle = m_AccelJob.Schedule(m_Positions.Length, 64);
-        m_JobHandle = m_Job.Schedule(m_Positions.Length, 64, m_AccelJobHandle);
+        m_PositionJobHandle = m_Job.Schedule(m_Positions.Length, 64, m_AccelJobHandle);
     }
 
     private void OnDestroy()

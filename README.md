@@ -27,13 +27,13 @@ All examples demonstrate the use of persistently-allocated job memory.
 
 ### [Change Mesh Vertices Every Frame](Assets/Scripts/MeshVerticesParallelUpdate.cs)
 
-Modify all 20678 vertices of a mesh in parellel every frame, using Perlin noise & sin(time).
+Modify all 20678 vertices of a mesh in parallel every frame, using Perlin noise & sin(time).
 
 Uses a single job.
 
 ### [Change Mesh Vertices & Normals Every Frame](Assets/Scripts/MeshVerticesParallelUpdate.cs)
 
-Modify all vertices & normals of a mesh in parellel every frame.
+Modify all vertices & normals of a mesh in parallel every frame.
 
 This is the *most visually interesting example*.  Uses a more complex single job.
 
@@ -41,7 +41,7 @@ This is the *most visually interesting example*.  Uses a more complex single job
 
 First determine velocities, then change positions based on those velocities.
 
-Demonstrates a simple 2-job dependency setup. 
+Demonstrates a simple 2-job dependency setup.
 
 
 ### [Point & Bounds Intersection Checks](Assets/Scripts/CheckBoundsParallelFor.cs)

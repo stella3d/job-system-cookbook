@@ -12,16 +12,29 @@ Each example script has a corresponding scene where it's set up.
 
 ## Examples
 
-Note: examples in this repo use `LateUpdate()` as an easy way to handle completing jobs later than we schedule them, but in real code you might want to schedule the jobs early in `Update` so you can use the result later in the same `Update`. 
+Note: examples in this repo use `LateUpdate()` as an easy way to handle completing jobs later than we schedule them, but in real code you might want to schedule the jobs early in `Update` (using Script Execution Order maybe) so you can use the result later in the same frame.
+
+10000 is the default number of items to have to iterate over to demonstrate how they perform at scale, but it's adjustable in the Inspector for each example.
+
+All examples demonstrate the use of persistently-allocated job memory.
 
 ### [Accelerate 10000 Cubes](Assets/Scripts/AccelerationParallelFor.cs)
 
-Demonstrates a simple 2-job dependency setup. 
 First determine velocities, then change positions based on those velocities.
+
+Demonstrates a simple 2-job dependency setup. 
 
 ### [Point & Bounds Intersection Checks](Assets/Scripts/CheckBoundsParallelFor.cs)
 
-Demonstrates checking a `Vector3` and a `Bounds` for intersection against a list of 10000 `Bounds`.
+Check a `Vector3` and a `Bounds` for intersection against a list of 10000 `Bounds`.
+
+Demonstrates running 2 independent jobs. 
+
+### [Ray / Bounds Intersection Checks](Assets/Scripts/RayBoundsIntersection.cs)
+
+Check a `Ray` for intersection with a large `Bounds` array in two steps.
+
+Demonstrates reducing an array of checks to a smaller list, and using temporarily-allocated job memory. 
 
 ### [Point Cloud Generation & Processing](Assets/Scripts/PointCloudProcessing.cs)
 

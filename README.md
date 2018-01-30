@@ -1,8 +1,11 @@
 C# Job System Cookbook
 =======================
 
-This is a repo of examples i've written to learn how to use the C# job system to write systems at scale, here for reference and sharing.  Each example script has a corresponding scene where it's set up.
+This is a repo of examples I've written to learn how to use the C# job system to write systems at scale, here for reference and sharing.
 
+This doesn't (yet!) cover things related to using C# jobs with the upcoming Entity Component System.
+
+Each example script has a corresponding scene where it's set up.
 
 
 ## Examples
@@ -11,7 +14,8 @@ Note: examples in this repo use `LateUpdate()` as an easy way to handle completi
 
 ### [Accelerate 10000 Cubes](Assets/Scripts/AccelerationParallelFor.cs)
 
-Demonstrates a simple 2-job dependency setup.
+Demonstrates a simple 2-job dependency setup. 
+First determine velocities, then change positions based on those velocities.
 
 ### [Point & Bounds Intersection Checks](Assets/Scripts/CheckBoundsParallelFor.cs)
 
@@ -20,3 +24,12 @@ Demonstrates checking a `Vector3` and a `Bounds` for intersection against a list
 ### [Point Cloud Generation & Processing](Assets/Scripts/PointCloudProcessing.cs)
 
 Generates a cloud of 10000 points, then calculates magnitudes & normalizes the points.
+
+
+## More Job System Details
+
+You can use the job system in the [2018.1 beta](https://unity3d.com/unity/beta) right now. 
+Examples written here are written & tested on the latest beta version, starting with beta 4.
+
+
+For a detailed look into the C# job system works, please watch the [Unite Austin presentation](https://www.youtube.com/watch?v=AXUvnk7Jws4) if you haven't seen it.  

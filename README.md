@@ -32,4 +32,4 @@ You can use the job system in the [2018.1 beta](https://unity3d.com/unity/beta) 
 Examples written here are written & tested on the latest beta version, starting with beta 4.
 
 
-For a detailed look into the C# job system works, please watch the [Unite Austin presentation](https://www.youtube.com/watch?v=AXUvnk7Jws4) if you haven't seen it.  
+For a detailed look into how the C# job system works, please watch the [Unite Austin presentation](https://www.youtube.com/watch?v=AXUvnk7Jws4) if you haven't seen it.  

@@ -12,7 +12,7 @@ Each example script has a corresponding scene where it's set up.
 
 ## Examples
 
-Note: examples in this repo use `LateUpdate()` as an easy way to handle completing jobs later than we schedule them, but in real code you might want to schedule the jobs early in `Update` so you can use the result later in the same `Update`. 
+Note: examples in this repo use `LateUpdate()` as an easy way to handle completing jobs later than we schedule them, but in real code you might want to schedule the jobs early in `Update` (using Script Execution Order maybe) so you can use the result later in the same frame.
 
 ### [Accelerate 10000 Cubes](Assets/Scripts/AccelerationParallelFor.cs)
 
@@ -22,6 +22,10 @@ First determine velocities, then change positions based on those velocities.
 ### [Point & Bounds Intersection Checks](Assets/Scripts/CheckBoundsParallelFor.cs)
 
 Demonstrates checking a `Vector3` and a `Bounds` for intersection against a list of 10000 `Bounds`.
+
+### [Ray / Bounds Intersection Checks](Assets/Scripts/RayBoundsIntersection.cs)
+
+Check a `Ray` for intersection with a large `Bounds` array in two steps.
 
 ### [Point Cloud Generation & Processing](Assets/Scripts/PointCloudProcessing.cs)
 

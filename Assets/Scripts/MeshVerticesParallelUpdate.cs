@@ -9,6 +9,7 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
     protected float m_Strength = 0.25f;
 
     NativeArray<Vector3> m_Vertices;
+    Vector3[] m_ModifiedVertices;
 
     CalculateJob m_CalculateJob;
 
@@ -25,6 +26,8 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
         
         // this persistent memory setup assumes our vertex count will not expand
         m_Vertices = new NativeArray<Vector3>(m_Mesh.vertices, Allocator.Persistent);
+
+        m_ModifiedVertices = new Vector3[m_Vertices.Length];
     }
 
     struct CalculateJob : IJobParallelFor
@@ -52,7 +55,9 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
     {
         m_JobHandle.Complete();
 
-        m_Mesh.vertices = m_CalculateJob.vertices.ToArray();
+        m_CalculateJob.vertices.CopyTo(m_ModifiedVertices);
+
+        m_Mesh.vertices = m_ModifiedVertices;
     }
 
     public void Update()

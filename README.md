@@ -10,6 +10,13 @@ This doesn't (yet!) cover things related to using C# jobs with the upcoming Enti
 
 Each example script has a corresponding scene where it's set up.
 
+## Job System Details
+
+You can use the job system in the [2018.1 beta](https://unity3d.com/unity/beta) right now. 
+Examples written here are written & tested on the latest beta version, starting with beta 4.
+
+For a detailed look into how the C# job system works, please watch the [Unite Austin presentation](https://www.youtube.com/watch?v=AXUvnk7Jws4) if you haven't seen it.  
+
 ## Examples
 
 Note: examples in this repo use `LateUpdate()` as an easy way to handle completing jobs later than we schedule them, but in real code you might want to schedule the jobs early in `Update` (using Script Execution Order maybe) so you can use the result later in the same frame.
@@ -48,10 +55,4 @@ Demonstrates reducing an array of checks to a smaller list, and using temporaril
 Generates a cloud of 10000 points, then calculates magnitudes & normalizes the points.
 
 
-## More Job System Details
 
-You can use the job system in the [2018.1 beta](https://unity3d.com/unity/beta) right now. 
-Examples written here are written & tested on the latest beta version, starting with beta 4.
-
-
-For a detailed look into how the C# job system works, please watch the [Unite Austin presentation](https://www.youtube.com/watch?v=AXUvnk7Jws4) if you haven't seen it.  

@@ -29,7 +29,7 @@ Modify all 20678 vertices of a mesh in parallel every frame, using Perlin noise 
 
 Uses a single job.
 
-### [Change Mesh Vertices & Normals Every Frame](Assets/Scripts/MeshVerticesParallelUpdate.cs)
+### [Change Mesh Vertices & Normals Every Frame](Assets/Scripts/MeshComplexParallel.cs)
 
 Modify all vertices & normals of a mesh in parallel every frame.
 

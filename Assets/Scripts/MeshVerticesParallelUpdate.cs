@@ -4,20 +4,14 @@ using Unity.Jobs;
 
 public class MeshVerticesParallelUpdate : MonoBehaviour
 {
-    public int vertexCount = 20000;
-
     [Range(0.05f, 1f)]
     [SerializeField]
     protected float m_Strength = 0.25f;
 
     NativeArray<Vector3> m_Vertices;
-    NativeArray<Vector3> m_Normals;
-    NativeArray<Vector2> m_Uv;
-    NativeArray<int> m_Triangles;
 
     CalculateJob m_CalculateJob;
 
-    JobHandle m_PositionJobHandle;
     JobHandle m_JobHandle;
 
     MeshFilter m_MeshFilter;
@@ -31,18 +25,11 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
         
         // this persistent memory setup assumes our vertex count will not expand
         m_Vertices = new NativeArray<Vector3>(m_Mesh.vertices, Allocator.Persistent);
-        m_Normals = new NativeArray<Vector3>(m_Mesh.normals, Allocator.Persistent);
-        m_Uv = new NativeArray<Vector2>(m_Mesh.uv, Allocator.Persistent);
-        m_Triangles = new NativeArray<int>(m_Mesh.triangles, Allocator.Persistent);
     }
 
     struct CalculateJob : IJobParallelFor
     {
         public NativeArray<Vector3> vertices;
-
-        //public NativeArray<Vector2> uv;
-
-        // public NativeArray<int> triangles;
 
         public float time;
 
@@ -83,8 +70,5 @@ public class MeshVerticesParallelUpdate : MonoBehaviour
     private void OnDestroy()
     {
         m_Vertices.Dispose();
-        m_Normals.Dispose();
-        m_Uv.Dispose();
-        m_Triangles.Dispose();
     }
 }

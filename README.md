@@ -29,7 +29,13 @@ All examples demonstrate the use of persistently-allocated job memory.
 
 Modify all 20678 vertices of a mesh in parellel every frame, using Perlin noise & sin(time).
 
-This is the most visually interesting example right now.  Uses a single job.
+Uses a single job.
+
+### [Change Mesh Vertices & Normals Every Frame](Assets/Scripts/MeshVerticesParallelUpdate.cs)
+
+Modify all vertices & normals of a mesh in parellel every frame.
+
+This is the *most visually interesting example*.  Uses a more complex single job.
 
 ### [Accelerate 10000 Cubes](Assets/Scripts/AccelerationParallelFor.cs)
 

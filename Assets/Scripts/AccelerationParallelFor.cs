@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using Unity.Collections;
 using Unity.Jobs;
+using UnityEngine.Jobs;
 
 public class AccelerationParallelFor : BaseJobObjectExample
 {
     public Vector3 m_Acceleration = new Vector3(0.0002f, 0.0001f, 0.0002f);
     public Vector3 m_AccelerationMod = new Vector3(.0001f, 0.0001f, 0.0001f);
 
-    NativeArray<Vector3> m_Positions;
     NativeArray<Vector3> m_Velocities;
-
+    TransformAccessArray m_TransformsAccessArray;
+    
     PositionUpdateJob m_Job;
     AccelerationJob m_AccelJob;
 
@@ -18,7 +19,6 @@ public class AccelerationParallelFor : BaseJobObjectExample
 
     protected void Start()
     {
-        m_Positions = new NativeArray<Vector3>(m_ObjectCount, Allocator.Persistent);
         m_Velocities = new NativeArray<Vector3>(m_ObjectCount, Allocator.Persistent);
 
         m_Objects = SetupUtils.PlaceRandomCubes(m_ObjectCount, m_ObjectPlacementRadius);
@@ -28,22 +28,21 @@ public class AccelerationParallelFor : BaseJobObjectExample
             var obj = m_Objects[i];
             m_Transforms[i] = obj.transform;
             m_Renderers[i] = obj.GetComponent<Renderer>();
-            m_Positions[i] = obj.transform.position;
         }
+
+        m_TransformsAccessArray = new TransformAccessArray(m_Transforms);
     }
 
-    struct PositionUpdateJob : IJobParallelFor
+    struct PositionUpdateJob : IJobParallelForTransform
     {
         [ReadOnly]
         public NativeArray<Vector3> velocity;  // the velocities from AccelerationJob
 
-        public NativeArray<Vector3> position;
-
         public float deltaTime;
 
-        public void Execute(int i)
+        public void Execute(int i, TransformAccess transform)
         {
-            position[i] += velocity[i] * deltaTime;
+            transform.position += velocity[i] * deltaTime;
         }
     }
 
@@ -77,30 +76,21 @@ public class AccelerationParallelFor : BaseJobObjectExample
         m_Job = new PositionUpdateJob()
         {
             deltaTime = Time.deltaTime,
-            position = m_Positions,
             velocity = m_Velocities,
         };
 
-        m_AccelJobHandle = m_AccelJob.Schedule(m_Positions.Length, 64);
-        m_PositionJobHandle = m_Job.Schedule(m_Positions.Length, 64, m_AccelJobHandle);
+        m_AccelJobHandle = m_AccelJob.Schedule(m_ObjectCount, 64);
+        m_PositionJobHandle = m_Job.Schedule(m_TransformsAccessArray, m_AccelJobHandle);
     }
 
     public void LateUpdate()
     {
         m_PositionJobHandle.Complete();
-
-        for (int i = 0; i < m_ObjectCount; i++)
-        {
-            // only actually set object's position if something is looking at it
-            // just an optimization so the performance depends more on the jobs
-            if (m_Renderers[i].isVisible)
-                m_Transforms[i].position = m_Job.position[i];
-        }
     }
 
     private void OnDestroy()
     {
-        m_Positions.Dispose();
         m_Velocities.Dispose();
+        m_TransformsAccessArray.Dispose();
     }
 }

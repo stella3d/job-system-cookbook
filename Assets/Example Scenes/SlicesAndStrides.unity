@@ -219,9 +219,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1530424465996766, guid: 7298800a145906744b69f51f9c3ef178, type: 2}
       propertyPath: m_Name
-      value: Torus
+      value: Jobs
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 33231087890176412, guid: 7298800a145906744b69f51f9c3ef178, type: 2}
+    - {fileID: 23759918217345754, guid: 7298800a145906744b69f51f9c3ef178, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 7298800a145906744b69f51f9c3ef178, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &2133878800
@@ -321,4 +323,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 424afa1c5181c684eb0518d79e03db12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Strength: 0.25
+  m_PointCount: 10000

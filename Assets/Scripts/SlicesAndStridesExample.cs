@@ -11,6 +11,9 @@ public class SlicesAndStridesExample : MonoBehaviour
     NativeArray<Vector4> m_PointCloud;
     NativeArray<float> m_Distances;
 
+    NativeArray<float> m_DistanceResults;
+    NativeArray<float> m_ConfidenceResults;
+
     UpdatePointCloudJob m_UpdatePointCloudJob;
     ConfidenceProcessingJob m_ConfidenceProcessingJob;
     DistanceParallelJob m_DistanceParallelJob;
@@ -23,6 +26,7 @@ public class SlicesAndStridesExample : MonoBehaviour
 
     static int updateCount;
 
+    // simulate a large, constantly changing point cloud
     struct UpdatePointCloudJob : IJobParallelFor
     {
         [WriteOnly]
@@ -54,6 +58,8 @@ public class SlicesAndStridesExample : MonoBehaviour
         }
     }
 
+
+    // calculate average confidence value for the current pointcloud
     struct ConfidenceProcessingJob : IJob
     {
         [ReadOnly]
@@ -69,13 +75,13 @@ public class SlicesAndStridesExample : MonoBehaviour
         {
             float total = 0f;
             int end = confidence.Length - sampleStride + 1;
+
             for (int i = 0; i < end; i += sampleStride)
                 total += confidence[i];
 
             average[0] = sampleStride * total / confidence.Length;
         }
     }
-
 
     // calculate the horizontal distance of every point in parallel
     struct DistanceParallelJob : IJobParallelFor
@@ -142,6 +148,9 @@ public class SlicesAndStridesExample : MonoBehaviour
         m_PointCloud = new NativeArray<Vector4>(m_PointCount, Allocator.Persistent);
         m_Distances = new NativeArray<float>(m_PointCount, Allocator.Persistent);
 
+        m_DistanceResults = new NativeArray<float>(3, Allocator.Persistent);
+        m_ConfidenceResults = new NativeArray<float>(1, Allocator.Persistent);
+
         for (int i = 0; i < m_PointCloud.Length; i++)
             m_PointCloud[i] = RandomVec4();
     }
@@ -159,7 +168,7 @@ public class SlicesAndStridesExample : MonoBehaviour
             // this stride is all the "w" values of the vectors
             // 12 is the byte offset of the "w" field 
             confidence = slice.SliceWithStride<float>(12),
-            average = new NativeArray<float>(1, Allocator.TempJob),
+            average = m_ConfidenceResults
         };
 
         m_DistanceParallelJob = new DistanceParallelJob()
@@ -177,7 +186,7 @@ public class SlicesAndStridesExample : MonoBehaviour
         m_AverageGroundDistanceJob = new AverageGroundDistanceJob()
         {
             distances = m_Distances,
-            average = new NativeArray<float>(3, Allocator.TempJob)
+            average = m_DistanceResults
         };
 
         m_ConfidenceJobHandle = m_ConfidenceProcessingJob.Schedule(m_PointCloudUpdateHandle);
@@ -197,8 +206,8 @@ public class SlicesAndStridesExample : MonoBehaviour
         PrintDebugInfo();
 
         // dispose any temporary job allocations
-        m_ConfidenceProcessingJob.average.Dispose();
-        m_AverageGroundDistanceJob.average.Dispose();
+        //m_ConfidenceProcessingJob.average.Dispose();
+        //m_AverageGroundDistanceJob.average.Dispose();
 
         // change our point cloud ahead of the next frame
         ScheduleNextPointUpdateJob();

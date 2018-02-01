@@ -46,18 +46,13 @@ public class SlicesAndStridesExample : MonoBehaviour
 
         public void Execute(int i)
         {
-            // semi-randomly skip updating points - we care about averages here
-            if (i % 2 == 0 && sinTimeRandom < 0.3f || sinTimeRandom > 0.9f)
-                return;
-
             var x = random + i * 0.001f - sinTimeRandom;
             var y = cosTimeRandom;
             var z = sinTimeRandom;
-            var w = Mathf.Clamp01(0.1f + random + 0.00001f * i);
+            var w = Mathf.Clamp01(0.2f + random + 0.00001f * i);
             points[i] = new Vector4(x, y, z, w);
         }
     }
-
 
     // calculate average confidence value for the current pointcloud
     struct ConfidenceProcessingJob : IJob
@@ -212,7 +207,7 @@ public class SlicesAndStridesExample : MonoBehaviour
     void ScheduleNextPointUpdateJob()
     {
         // change some of the points before next frame to simulate pointcloud
-        var turbulence = Mathf.Clamp01(UnityEngine.Random.value + 0.1f);
+        var turbulence = Mathf.Clamp01(UnityEngine.Random.value + 0.333f) - .333f;
 
         m_UpdatePointCloudJob = new UpdatePointCloudJob()
         {
@@ -233,16 +228,11 @@ public class SlicesAndStridesExample : MonoBehaviour
         if (updateCount % 150 == 0 || updateCount == 1)
         {
             var distances = m_AverageGroundDistanceJob.average;
+            var confidence = m_ConfidenceProcessingJob.average[0];
 
-            var groundDistance = distances[0];
-            var distanceMin = distances[1];
-            var distanceMax = distances[2];
-
-            Debug.Log("distance average: " + groundDistance);
-            Debug.Log("distance min: " + distanceMin + " , max: " + distanceMax);
-
-            var conf = m_ConfidenceProcessingJob.average[0];
-            Debug.Log("confidence average: " + conf);
+            Debug.Log("distance average: " + distances[0]);
+            Debug.Log("distance min: " + distances[1] + " , max: " + distances[2]);
+            Debug.Log("confidence average: " + confidence);
         }
     }
 

@@ -157,14 +157,19 @@ public class SlicesAndStridesExample : MonoBehaviour
             sampleStride = 2,
 
             // this stride is all the "w" values of the vectors
+            // 12 is the byte offset of the "w" field 
             confidence = slice.SliceWithStride<float>(12),
             average = new NativeArray<float>(1, Allocator.TempJob),
         };
 
         m_DistanceParallelJob = new DistanceParallelJob()
         {
-            x = slice.SliceWithStride<float>(0),   // all x values of vectors
-            z = slice.SliceWithStride<float>(8),   // all z values of vectors
+            // all x values of vectors - x has 0 byte field offset
+            x = slice.SliceWithStride<float>(0),
+            
+            // all z values of vectors - z has 8 byte field offset
+            z = slice.SliceWithStride<float>(8),
+
             compareValue = Vector2.zero,
             distances = m_Distances
         };
@@ -181,8 +186,6 @@ public class SlicesAndStridesExample : MonoBehaviour
             .Schedule(m_Distances.Length, 128, m_PointCloudUpdateHandle);
 
         m_DistanceJobHandle = m_AverageGroundDistanceJob.Schedule(m_ParallelDistanceJobHandle);
-
-        updateCount++;
     }
 
     public void LateUpdate()
@@ -220,6 +223,7 @@ public class SlicesAndStridesExample : MonoBehaviour
 
     void PrintDebugInfo()
     {
+        updateCount++;
         // this is just to only log info every n updates
         if (updateCount % 150 == 0 || updateCount == 1)
         {

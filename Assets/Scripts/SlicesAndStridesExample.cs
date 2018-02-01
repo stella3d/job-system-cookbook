@@ -205,10 +205,6 @@ public class SlicesAndStridesExample : MonoBehaviour
 
         PrintDebugInfo();
 
-        // dispose any temporary job allocations
-        //m_ConfidenceProcessingJob.average.Dispose();
-        //m_AverageGroundDistanceJob.average.Dispose();
-
         // change our point cloud ahead of the next frame
         ScheduleNextPointUpdateJob();
     }
@@ -259,13 +255,6 @@ public class SlicesAndStridesExample : MonoBehaviour
 
     private void OnDestroy()
     {
-        // handle temp allocations in case OnDestroy happens in a weird spot
-        if (m_ConfidenceProcessingJob.average.IsCreated)
-        {
-            m_ConfidenceProcessingJob.average.Dispose();
-            m_AverageGroundDistanceJob.average.Dispose();
-        }
-
         // make sure we don't have running jobs
         if (!m_PointCloudUpdateHandle.IsCompleted)
             m_PointCloudUpdateHandle.Complete();
@@ -273,6 +262,8 @@ public class SlicesAndStridesExample : MonoBehaviour
         // dispose our permanent allocations
         m_PointCloud.Dispose();
         m_Distances.Dispose();
+        m_DistanceResults.Dispose();
+        m_ConfidenceResults.Dispose();
     }
 
 }

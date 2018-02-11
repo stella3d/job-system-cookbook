@@ -50,10 +50,4 @@ public class MeshComplexMainThread : MonoBehaviour
         m_Mesh.normals = m_ModifiedNormals;
     }
 
-    public void LateUpdate()
-    {
-        m_Mesh.vertices = m_ModifiedVertices;
-        m_Mesh.normals = m_ModifiedNormals;
-    }
-
 }

@@ -125,12 +125,10 @@ public struct ThresholdExclusiveOrBurstJob : IJobParallelFor
     public byte threshold;
     public int height;
     public int widthOverLineSkip;
-    public int width;
-    public int lineSkip;
 
     public void Execute(int i)
     {
-        bool operateOnThisPixel = (i % height) < width / lineSkip;
+        bool operateOnThisPixel = (i % height) < widthOverLineSkip;
         bool overThreshold = data[i] > threshold;
         data[i] = (byte)math.select(data[i], data[i] ^ threshold, overThreshold && operateOnThisPixel);
     }

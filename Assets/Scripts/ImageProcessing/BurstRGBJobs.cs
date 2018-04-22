@@ -22,6 +22,18 @@ public struct ThresholdComplementBurstJob : IJobParallelFor
 }
 
 [ComputeJobOptimization]
+public struct ComplementNoSkipJob : IJobParallelFor
+{
+    public NativeSlice<byte> data;
+    public byte threshold;
+
+    public void Execute(int i)
+    {
+        data[i] = (byte)math.select(data[i], ~data[i], data[i] > threshold);
+    }
+}
+
+[ComputeJobOptimization]
 public struct ThresholdLeftShiftBurstJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -35,6 +47,18 @@ public struct ThresholdLeftShiftBurstJob : IJobParallelFor
         bool operateOnThisPixel = (i % height) < width / lineSkip;
         bool overThreshold = data[i] > threshold;
         data[i] = (byte)math.select(data[i], data[i] << data[i], overThreshold && operateOnThisPixel);
+    }
+}
+
+[ComputeJobOptimization]
+public struct LeftShiftNoSkipJob : IJobParallelFor
+{
+    public NativeSlice<byte> data;
+    public byte threshold;
+
+    public void Execute(int i)
+    {
+        data[i] = (byte)math.select(data[i], data[i] << data[i], data[i] > threshold);
     }
 }
 
@@ -56,6 +80,18 @@ public struct ThresholdRightShiftBurstJob : IJobParallelFor
 }
 
 [ComputeJobOptimization]
+public struct RightShiftNoSkipJob : IJobParallelFor
+{
+    public NativeSlice<byte> data;
+    public byte threshold;
+
+    public void Execute(int i)
+    {
+        data[i] = (byte)math.select(data[i], data[i] >> data[i], data[i] > threshold);
+    }
+}
+
+[ComputeJobOptimization]
 public struct ThresholdExclusiveOrBurstJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -71,4 +107,17 @@ public struct ThresholdExclusiveOrBurstJob : IJobParallelFor
         data[i] = (byte)math.select(data[i], data[i] ^ threshold, overThreshold && operateOnThisPixel);
     }
 }
+
+[ComputeJobOptimization]
+public struct ThresholdExclusiveOrNoSkipJob : IJobParallelFor
+{
+    public NativeSlice<byte> data;
+    public byte threshold;
+
+    public void Execute(int i)
+    {
+        data[i] = (byte)math.select(data[i], data[i] ^ threshold, data[i] > threshold);
+    }
+}
+
 

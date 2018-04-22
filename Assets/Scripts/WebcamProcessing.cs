@@ -76,7 +76,7 @@ public class WebcamProcessing : MonoBehaviour
         m_NativeColors.Dispose();
     }
 
-    void Update ()
+    void Update()
     {
         // load is one half of our big bottleneck with this method - copying data
         m_CamTexture.GetPixels32(m_Data);
@@ -93,16 +93,28 @@ public class WebcamProcessing : MonoBehaviour
         switch (effect)
         {
             case ExampleEffect.ExclusiveOrThreshold:
-                BurstExclusiveOrProcessing(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                if (lineSkip == 1)
+                    ExclusiveOrProcessWithoutLineSkip(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                else
+                    BurstExclusiveOrProcessing(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
                 break;
             case ExampleEffect.LeftShiftThreshold:
-                BurstLeftShiftProcessing(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                if (lineSkip == 1)
+                    LeftShiftProcessWithoutLineSkip(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                else
+                    BurstLeftShiftProcessing(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
                 break;
             case ExampleEffect.RightShiftThreshold:
-                BurstRightShiftProcessing(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                if(lineSkip == 1)
+                    RightShiftProcessWithoutLineSkip(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                else
+                    BurstRightShiftProcessing(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
                 break;
             case ExampleEffect.ComplementThreshold:
-                BurstComplementProcessing(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                if (lineSkip == 1)
+                    ComplementWithoutLineSkip(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                else
+                    BurstComplementProcessing(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
                 break;
         }
     }
@@ -147,9 +159,9 @@ public class WebcamProcessing : MonoBehaviour
         };
 
         var length = m_NativeRed.Length;
-        var rHandle = redJob.Schedule(length, 128);
-        var gHandle = greenJob.Schedule(length, 128, rHandle);
-        handle = blueJob.Schedule(length, 128, gHandle);
+        var rHandle = redJob.Schedule(length, 256);
+        var gHandle = greenJob.Schedule(length, 256, rHandle);
+        handle = blueJob.Schedule(length, 256, gHandle);
     }
 
     void BurstLeftShiftProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
@@ -182,9 +194,9 @@ public class WebcamProcessing : MonoBehaviour
         };
 
         var length = m_NativeRed.Length;
-        var rHandle = redJob.Schedule(length, 128);
-        var gHandle = greenJob.Schedule(length, 128, rHandle);
-        handle = blueJob.Schedule(length, 128, gHandle);
+        var rHandle = redJob.Schedule(length, 256);
+        var gHandle = greenJob.Schedule(length, 256, rHandle);
+        handle = blueJob.Schedule(length, 256, gHandle);
     }
 
     void BurstRightShiftProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
@@ -217,9 +229,9 @@ public class WebcamProcessing : MonoBehaviour
         };
 
         var length = m_NativeRed.Length;
-        var rHandle = redJob.Schedule(length, 128);
-        var gHandle = greenJob.Schedule(length, 128, rHandle);
-        handle = blueJob.Schedule(length, 128, gHandle);
+        var rHandle = redJob.Schedule(length, 256);
+        var gHandle = greenJob.Schedule(length, 256, rHandle);
+        handle = blueJob.Schedule(length, 256, gHandle);
     }
 
     void BurstExclusiveOrProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
@@ -252,9 +264,112 @@ public class WebcamProcessing : MonoBehaviour
         };
 
         var length = m_NativeRed.Length;
-        var rHandle = redJob.Schedule(length, 128);
-        var gHandle = greenJob.Schedule(length, 128, rHandle);
-        handle = blueJob.Schedule(length, 128, gHandle);
+        var rHandle = redJob.Schedule(length, 1024);
+        var gHandle = greenJob.Schedule(length, 1024, rHandle);
+        handle = blueJob.Schedule(length, 1024, gHandle);
     }
 
+    void ExclusiveOrProcessWithoutLineSkip(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
+    {
+        var redJob = new ThresholdExclusiveOrNoSkipJob()
+        {
+            data = r,
+            threshold = m_ColorThreshold.r
+        };
+
+        var greenJob = new ThresholdExclusiveOrNoSkipJob()
+        {
+            data = g,
+            threshold = m_ColorThreshold.g
+        };
+
+        var blueJob = new ThresholdExclusiveOrNoSkipJob()
+        {
+            data = b,
+            threshold = m_ColorThreshold.b
+        };
+
+        var length = m_NativeRed.Length;
+        var rHandle = redJob.Schedule(length, 512);
+        var gHandle = greenJob.Schedule(length, 512, rHandle);
+        handle = blueJob.Schedule(length, 512, gHandle);
+    }
+
+    void RightShiftProcessWithoutLineSkip(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
+    {
+        var redJob = new RightShiftNoSkipJob()
+        {
+            data = r,
+            threshold = m_ColorThreshold.r
+        };
+
+        var greenJob = new RightShiftNoSkipJob()
+        {
+            data = g,
+            threshold = m_ColorThreshold.g
+        };
+
+        var blueJob = new RightShiftNoSkipJob()
+        {
+            data = b,
+            threshold = m_ColorThreshold.b
+        };
+
+        var length = m_NativeRed.Length;
+        var rHandle = redJob.Schedule(length, 512);
+        var gHandle = greenJob.Schedule(length, 512, rHandle);
+        handle = blueJob.Schedule(length, 512, gHandle);
+    }
+
+    void LeftShiftProcessWithoutLineSkip(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
+    {
+        var redJob = new LeftShiftNoSkipJob()
+        {
+            data = r,
+            threshold = m_ColorThreshold.r
+        };
+
+        var greenJob = new LeftShiftNoSkipJob()
+        {
+            data = g,
+            threshold = m_ColorThreshold.g
+        };
+
+        var blueJob = new LeftShiftNoSkipJob()
+        {
+            data = b,
+            threshold = m_ColorThreshold.b
+        };
+
+        var length = m_NativeRed.Length;
+        var rHandle = redJob.Schedule(length, 512);
+        var gHandle = greenJob.Schedule(length, 512, rHandle);
+        handle = blueJob.Schedule(length, 512, gHandle);
+    }
+
+    void ComplementWithoutLineSkip(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
+    {
+        var redJob = new ComplementNoSkipJob()
+        {
+            data = r,
+            threshold = m_ColorThreshold.r
+        };
+
+        var greenJob = new ComplementNoSkipJob()
+        {
+            data = g,
+            threshold = m_ColorThreshold.g
+        };
+
+        var blueJob = new ComplementNoSkipJob()
+        {
+            data = b,
+            threshold = m_ColorThreshold.b
+        };
+
+        var length = m_NativeRed.Length;
+        var rHandle = redJob.Schedule(length, 512);
+        var gHandle = greenJob.Schedule(length, 512, rHandle);
+        handle = blueJob.Schedule(length, 512, gHandle);
+    }
 }

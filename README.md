@@ -29,7 +29,7 @@ Process input from a webcam in real time using Burst-compiled jobs.
 
 the job details are all in [this file](/Assets/Scripts/ImageProcessing/BurstRGBJobs.cs), and the above file is the main script.
 
-This demo implements 4 different effects , all based around operating on a pixel only if it's color channel value is over some threshold
+This demo implements 5 different effects , all based around operating on a pixel only if it's color channel value is over some threshold
 
 To change the color thresholds, select the `WebcamDisplay` in the heirarchy of the example scene & check out the `Webcam Processing` component.  You can also change the scanline effect as well as select a webcam resolution that works for you there.
 

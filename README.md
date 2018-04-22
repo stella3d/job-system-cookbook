@@ -6,7 +6,7 @@ This is a repo of examples I've written to learn how to use the C# job system to
 The goal of this repo is making it clearer how you can _structure_ your data, _schedule_ your jobs, and use the results. 
 So, the examples use easy to understand problems & algorithms. 
 
-This doesn't (yet!) cover things related to using C# jobs with the upcoming Entity Component System.
+This repo does not cover using C# jobs with the Entity Component System. Please see the [official example repo](https://github.com/Unity-Technologies/EntityComponentSystemSamples) for more on that.
 
 Each example script has a corresponding scene where it's set up.
 

@@ -14,6 +14,9 @@ public enum ExampleEffect
 public class WebcamProcessing : MonoBehaviour
 {
     [SerializeField]
+    [Tooltip("Which webcam to use")]
+    int m_WebcamIndex;
+
     WebCamDevice m_CamDevice;
     WebCamTexture m_CamTexture;
 
@@ -57,7 +60,10 @@ public class WebcamProcessing : MonoBehaviour
         m_NativeGreen = slice.SliceWithStride<byte>(1);
         m_NativeBlue = slice.SliceWithStride<byte>(2);
 
-        m_CamDevice = WebCamTexture.devices[1];
+        if (m_WebcamIndex >= WebCamTexture.devices.Length)
+            m_WebcamIndex = WebCamTexture.devices.Length - 1;
+
+        m_CamDevice = WebCamTexture.devices[m_WebcamIndex];
         m_CamTexture = new WebCamTexture(m_CamDevice.name, m_WebcamTextureSize.x, m_WebcamTextureSize.y);
         Renderer renderer = GetComponent<Renderer>();
         renderer.material.mainTexture = m_CamTexture;

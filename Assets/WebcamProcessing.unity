@@ -334,11 +334,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb92a3a903a76864390a9ca5a2e77bd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_WebcamIndex: 1
   m_ColorThreshold:
     serializedVersion: 2
     rgba: 13419080
-  effect: 4
-  lineSkip: 2
+  effect: 3
+  lineSkip: 1
   m_WebcamTextureSize: {x: 1024, y: 576}
   m_Texture: {fileID: 2800000, guid: c506ed7f5ca490147964725fe4200b2f, type: 3}
 --- !u!1 &2133878800

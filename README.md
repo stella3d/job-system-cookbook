@@ -27,6 +27,8 @@ All examples demonstrate the use of persistently-allocated job memory.
 
 Process input from a webcam in real time using Burst-compiled jobs.
 
+the job details are all in [this file](/Assets/Scripts/ImageProcessing/BurstRGBJobs.cs), and the above file is the main script.
+
 This demo implements 4 different effects , all based around operating on a pixel only if it's color channel value is over some threshold
 
 ### [Change Mesh Vertices & Normals Every Frame](Assets/Scripts/MeshComplexParallel.cs)

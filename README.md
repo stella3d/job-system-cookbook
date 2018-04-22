@@ -23,17 +23,23 @@ Note: examples in this repo use `LateUpdate()` as an easy way to handle completi
 
 All examples demonstrate the use of persistently-allocated job memory.
 
-### [Change Mesh Vertices Every Frame](Assets/Scripts/MeshVerticesParallelUpdate.cs)
+# [Realtime Image Processing (with Burst compilation)](Assets/Scripts/WebcamProcessing.cs)
 
-Modify all 20678 vertices of a mesh in parallel every frame, using Perlin noise & sin(time).
+Process input from a webcam in real time using Burst-compiled jobs.
 
-Uses a single job.
+This demo implements 4 different effects , all based around operating on a pixel only if it's color channel value is over some threshold
 
 ### [Change Mesh Vertices & Normals Every Frame](Assets/Scripts/MeshComplexParallel.cs)
 
 Modify all vertices & normals of a mesh in parallel every frame.
 
 This is the *most visually interesting example*.  Uses a more complex single job.
+
+### [Change Mesh Vertices Every Frame](Assets/Scripts/MeshVerticesParallelUpdate.cs)
+
+Modify all 20678 vertices of a mesh in parallel every frame, using Perlin noise & sin(time).
+
+Uses a single job.
 
 ### [Accelerate 10000 Cubes](Assets/Scripts/AccelerationParallelFor.cs)
 

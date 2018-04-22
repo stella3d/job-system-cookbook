@@ -138,31 +138,28 @@ public class WebcamProcessing : MonoBehaviour
 
     void BurstComplementProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
     {
-        var redJob = new ThresholdComplementBurstJob()
+        var redJob = new SelfComplementWithSkipJob()
         {
             data = r,
             threshold = m_ColorThreshold.r,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
-        var greenJob = new ThresholdComplementBurstJob()
+        var greenJob = new SelfComplementWithSkipJob()
         {
             data = g,
             threshold = m_ColorThreshold.g,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
-        var blueJob = new ThresholdComplementBurstJob()
+        var blueJob = new SelfComplementWithSkipJob()
         {
             data = b,
             threshold = m_ColorThreshold.b,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var length = m_NativeRed.Length;
@@ -173,31 +170,28 @@ public class WebcamProcessing : MonoBehaviour
 
     void BurstLeftShiftProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
     {
-        var redJob = new ThresholdLeftShiftBurstJob()
+        var redJob = new SelfLeftShiftBurstJob()
         {
             data = r,
             threshold = m_ColorThreshold.r,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
-        var greenJob = new ThresholdLeftShiftBurstJob()
+        var greenJob = new SelfLeftShiftBurstJob()
         {
             data = g,
             threshold = m_ColorThreshold.g,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
-        var blueJob = new ThresholdLeftShiftBurstJob()
+        var blueJob = new SelfLeftShiftBurstJob()
         {
             data = b,
             threshold = m_ColorThreshold.b,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var length = m_NativeRed.Length;
@@ -212,27 +206,24 @@ public class WebcamProcessing : MonoBehaviour
         {
             data = r,
             threshold = m_ColorThreshold.r,
-            width = m_WebcamTextureSize.x,
-            height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
+            height = m_WebcamTextureSize.y
         };
 
         var greenJob = new ThresholdRightShiftBurstJob()
         {
             data = g,
             threshold = m_ColorThreshold.g,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var blueJob = new ThresholdRightShiftBurstJob()
         {
             data = b,
             threshold = m_ColorThreshold.b,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var length = m_NativeRed.Length;
@@ -247,27 +238,24 @@ public class WebcamProcessing : MonoBehaviour
         {
             data = r,
             threshold = m_ColorThreshold.r,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var greenJob = new ThresholdExclusiveOrBurstJob()
         {
             data = g,
             threshold = m_ColorThreshold.g,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var blueJob = new ThresholdExclusiveOrBurstJob()
         {
             data = b,
             threshold = m_ColorThreshold.b,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var length = m_NativeRed.Length;
@@ -282,27 +270,24 @@ public class WebcamProcessing : MonoBehaviour
         {
             data = r,
             threshold = m_ColorThreshold.r,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var greenJob = new SelfExclusiveOrBurstJob()
         {
             data = g,
             threshold = m_ColorThreshold.g,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var blueJob = new SelfExclusiveOrBurstJob()
         {
             data = b,
             threshold = m_ColorThreshold.b,
-            width = m_WebcamTextureSize.x,
+            widthOverLineSkip = m_WebcamTextureSize.x / lineSkip,
             height = m_WebcamTextureSize.y,
-            lineSkip = lineSkip
         };
 
         var length = m_NativeRed.Length;
@@ -417,19 +402,19 @@ public class WebcamProcessing : MonoBehaviour
 
     void ComplementWithoutLineSkip(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
     {
-        var redJob = new ComplementNoSkipJob()
+        var redJob = new SelfComplementNoSkipJob()
         {
             data = r,
             threshold = m_ColorThreshold.r
         };
 
-        var greenJob = new ComplementNoSkipJob()
+        var greenJob = new SelfComplementNoSkipJob()
         {
             data = g,
             threshold = m_ColorThreshold.g
         };
 
-        var blueJob = new ComplementNoSkipJob()
+        var blueJob = new SelfComplementNoSkipJob()
         {
             data = b,
             threshold = m_ColorThreshold.b

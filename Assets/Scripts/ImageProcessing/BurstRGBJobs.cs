@@ -5,24 +5,23 @@ using Unity.Mathematics;
 
 
 [ComputeJobOptimization]
-public struct ThresholdComplementBurstJob : IJobParallelFor
+public struct SelfComplementWithSkipJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
     public byte threshold;
     public int height;
-    public int width;
-    public int lineSkip;
+    public int widthOverLineSkip;
 
     public void Execute(int i)
     {
-        bool operateOnThisPixel = (i % height) < width / lineSkip;
+        bool operateOnThisPixel = (i % height) < widthOverLineSkip;
         bool overThreshold = data[i] > threshold;
         data[i] = (byte)math.select(data[i], ~data[i], overThreshold && operateOnThisPixel);
     }
 }
 
 [ComputeJobOptimization]
-public struct ComplementNoSkipJob : IJobParallelFor
+public struct SelfComplementNoSkipJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
     public byte threshold;
@@ -33,18 +32,18 @@ public struct ComplementNoSkipJob : IJobParallelFor
     }
 }
 
+
 [ComputeJobOptimization]
-public struct ThresholdLeftShiftBurstJob : IJobParallelFor
+public struct SelfLeftShiftBurstJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
     public byte threshold;
     public int height;
-    public int width;
-    public int lineSkip;
+    public int widthOverLineSkip;
 
     public void Execute(int i)
     {
-        bool operateOnThisPixel = (i % height) < width / lineSkip;
+        bool operateOnThisPixel = (i % height) < widthOverLineSkip;
         bool overThreshold = data[i] > threshold;
         data[i] = (byte)math.select(data[i], data[i] << data[i], overThreshold && operateOnThisPixel);
     }
@@ -68,12 +67,11 @@ public struct ThresholdRightShiftBurstJob : IJobParallelFor
     public NativeSlice<byte> data;
     public byte threshold;
     public int height;
-    public int width;
-    public int lineSkip;
+    public int widthOverLineSkip;
 
     public void Execute(int i)
     {
-        bool operateOnThisPixel = (i % height) < width / lineSkip;
+        bool operateOnThisPixel = (i % height) < widthOverLineSkip;
         bool overThreshold = data[i] > threshold;
         data[i] = (byte)math.select(data[i], data[i] >> data[i], overThreshold && operateOnThisPixel);
     }
@@ -98,12 +96,11 @@ public struct SelfExclusiveOrBurstJob : IJobParallelFor
     public NativeSlice<byte> data;
     public byte threshold;
     public int height;
-    public int width;
-    public int lineSkip;
+    public int widthOverLineSkip;
 
     public void Execute(int i)
     {
-        bool operateOnThisPixel = (i % height) < width / lineSkip;
+        bool operateOnThisPixel = (i % height) < widthOverLineSkip;
         bool overThreshold = data[i] > threshold;
         data[i] = (byte)math.select(data[i], data[i] ^ threshold, overThreshold && operateOnThisPixel);
     }
@@ -127,6 +124,7 @@ public struct ThresholdExclusiveOrBurstJob : IJobParallelFor
     public NativeSlice<byte> data;
     public byte threshold;
     public int height;
+    public int widthOverLineSkip;
     public int width;
     public int lineSkip;
 

@@ -39,8 +39,7 @@ This is the *most visually interesting example*.  Uses a more complex single job
 
 First determine velocities, then change positions based on those velocities.
 
-Demonstrates a simple 2-job dependency setup.
-
+Demonstrates using the TransformAccessArray, necessary for doing transform operations in jobs.    
 
 ### [Point & Bounds Intersection Checks](Assets/Scripts/CheckBoundsParallelFor.cs)
 

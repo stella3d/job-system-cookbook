@@ -6,24 +6,22 @@ public class MeshComplexParallel : MonoBehaviour
 {
     [Range(0.05f, 1f)]
     [SerializeField]
-    protected float m_Strength = 0.25f;
+    protected float m_Strength = 0.1f;
 
     NativeArray<Vector3> m_Vertices;
     NativeArray<Vector3> m_Normals;
+
     Vector3[] m_ModifiedVertices;
     Vector3[] m_ModifiedNormals;
 
-    CalculateJob m_CalculateJob;
-
+    MeshModJob m_MeshModJob;
     JobHandle m_JobHandle;
 
-    MeshFilter m_MeshFilter;
     Mesh m_Mesh;
 
     protected void Start()
     {
-        m_MeshFilter = gameObject.GetComponent<MeshFilter>();
-        m_Mesh = m_MeshFilter.mesh;
+        m_Mesh = gameObject.GetComponent<MeshFilter>().mesh;
         m_Mesh.MarkDynamic();
 
         // this persistent memory setup assumes our vertex count will not expand
@@ -34,10 +32,9 @@ public class MeshComplexParallel : MonoBehaviour
         m_ModifiedNormals = new Vector3[m_Vertices.Length];
     }
 
-    struct CalculateJob : IJobParallelFor
+    struct MeshModJob : IJobParallelFor
     {
         public NativeArray<Vector3> vertices;
-
         public NativeArray<Vector3> normals;
 
         public float sinTime;
@@ -64,7 +61,7 @@ public class MeshComplexParallel : MonoBehaviour
 
     public void Update()
     {
-        m_CalculateJob = new CalculateJob()
+        m_MeshModJob = new MeshModJob()
         {
             vertices = m_Vertices,
             normals = m_Normals,
@@ -73,15 +70,16 @@ public class MeshComplexParallel : MonoBehaviour
             strength = m_Strength / 5f  // map .05-1 range to smaller real strength
         };
 
-        m_JobHandle = m_CalculateJob.Schedule(m_Vertices.Length, 64);
+        m_JobHandle = m_MeshModJob.Schedule(m_Vertices.Length, 64);
     }
 
     public void LateUpdate()
     {
         m_JobHandle.Complete();
 
-        m_CalculateJob.vertices.CopyTo(m_ModifiedVertices);
-        m_CalculateJob.normals.CopyTo(m_ModifiedNormals);
+        // copy our results to managed arrays so we can assign them
+        m_MeshModJob.vertices.CopyTo(m_ModifiedVertices);
+        m_MeshModJob.normals.CopyTo(m_ModifiedNormals);
 
         m_Mesh.vertices = m_ModifiedVertices;
         m_Mesh.normals = m_ModifiedNormals;
@@ -89,6 +87,7 @@ public class MeshComplexParallel : MonoBehaviour
 
     private void OnDestroy()
     {
+        // make sure to Dispose() any NativeArrays when we're done
         m_Vertices.Dispose();
         m_Normals.Dispose();
     }

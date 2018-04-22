@@ -119,28 +119,28 @@ public class WebcamProcessing : MonoBehaviour
 
     void BurstComplementProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
     {
-        var redJob = new RedThresholdComplementBurstJob()
+        var redJob = new ThresholdComplementBurstJob()
         {
             data = r,
-            redThreshold = m_ColorThreshold.r,
+            threshold = m_ColorThreshold.r,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
         };
 
-        var greenJob = new GreenThresholdComplementBurstJob()
+        var greenJob = new ThresholdComplementBurstJob()
         {
             data = g,
-            greenThreshold = m_ColorThreshold.g,
+            threshold = m_ColorThreshold.g,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
         };
 
-        var blueJob = new BlueThresholdComplementBurstJob()
+        var blueJob = new ThresholdComplementBurstJob()
         {
             data = b,
-            blueThreshold = m_ColorThreshold.b,
+            threshold = m_ColorThreshold.b,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
@@ -154,28 +154,28 @@ public class WebcamProcessing : MonoBehaviour
 
     void BurstLeftShiftProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
     {
-        var redJob = new RedThresholdLeftShiftBurstJob()
+        var redJob = new ThresholdLeftShiftBurstJob()
         {
             data = r,
-            redThreshold = m_ColorThreshold.r,
+            threshold = m_ColorThreshold.r,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
         };
 
-        var greenJob = new GreenThresholdLeftShiftBurstJob()
+        var greenJob = new ThresholdLeftShiftBurstJob()
         {
             data = g,
-            greenThreshold = m_ColorThreshold.g,
+            threshold = m_ColorThreshold.g,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
         };
 
-        var blueJob = new BlueThresholdLeftShiftBurstJob()
+        var blueJob = new ThresholdLeftShiftBurstJob()
         {
             data = b,
-            blueThreshold = m_ColorThreshold.b,
+            threshold = m_ColorThreshold.b,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
@@ -189,28 +189,28 @@ public class WebcamProcessing : MonoBehaviour
 
     void BurstRightShiftProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
     {
-        var redJob = new RedThresholdRightShiftBurstJob()
+        var redJob = new ThresholdRightShiftBurstJob()
         {
             data = r,
-            redThreshold = m_ColorThreshold.r,
+            threshold = m_ColorThreshold.r,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
         };
 
-        var greenJob = new GreenThresholdRightShiftBurstJob()
+        var greenJob = new ThresholdRightShiftBurstJob()
         {
             data = g,
-            greenThreshold = m_ColorThreshold.g,
+            threshold = m_ColorThreshold.g,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
         };
 
-        var blueJob = new BlueThresholdRightShiftBurstJob()
+        var blueJob = new ThresholdRightShiftBurstJob()
         {
             data = b,
-            blueThreshold = m_ColorThreshold.b,
+            threshold = m_ColorThreshold.b,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
@@ -224,28 +224,28 @@ public class WebcamProcessing : MonoBehaviour
 
     void BurstExclusiveOrProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
     {
-        var redJob = new RedThresholdExclusiveOrBurstJob()
+        var redJob = new ThresholdExclusiveOrBurstJob()
         {
             data = r,
-            redThreshold = m_ColorThreshold.r,
+            threshold = m_ColorThreshold.r,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
         };
 
-        var greenJob = new GreenThresholdExclusiveOrBurstJob()
+        var greenJob = new ThresholdExclusiveOrBurstJob()
         {
             data = g,
-            greenThreshold = m_ColorThreshold.g,
+            threshold = m_ColorThreshold.g,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip
         };
 
-        var blueJob = new BlueThresholdExclusiveOrBurstJob()
+        var blueJob = new ThresholdExclusiveOrBurstJob()
         {
             data = b,
-            blueThreshold = m_ColorThreshold.b,
+            threshold = m_ColorThreshold.b,
             width = m_WebcamTextureSize.x,
             height = m_WebcamTextureSize.y,
             lineSkip = lineSkip

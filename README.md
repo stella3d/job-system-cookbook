@@ -31,6 +31,8 @@ the job details are all in [this file](/Assets/Scripts/ImageProcessing/BurstRGBJ
 
 This demo implements 4 different effects , all based around operating on a pixel only if it's color channel value is over some threshold
 
+To change the color thresholds, select the `WebcamDisplay` in the heirarchy of the example scene & check out the `Webcam Processing` component.  You can also change the scanline effect as well as select a webcam resolution that works for you there.
+
 ### [Change Mesh Vertices & Normals Every Frame](Assets/Scripts/MeshComplexParallel.cs)
 
 Modify all vertices & normals of a mesh in parallel every frame.

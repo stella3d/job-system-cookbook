@@ -91,6 +91,36 @@ public struct RightShiftNoSkipJob : IJobParallelFor
     }
 }
 
+
+[ComputeJobOptimization(Accuracy.Low, Support.Relaxed)]
+public struct SelfExclusiveOrBurstJob : IJobParallelFor
+{
+    public NativeSlice<byte> data;
+    public byte threshold;
+    public int height;
+    public int width;
+    public int lineSkip;
+
+    public void Execute(int i)
+    {
+        bool operateOnThisPixel = (i % height) < width / lineSkip;
+        bool overThreshold = data[i] > threshold;
+        data[i] = (byte)math.select(data[i], data[i] ^ threshold, overThreshold && operateOnThisPixel);
+    }
+}
+
+[ComputeJobOptimization(Accuracy.Low, Support.Relaxed)]
+public struct SelfExclusiveOrNoSkipJob : IJobParallelFor
+{
+    public NativeSlice<byte> data;
+    public byte threshold;
+
+    public void Execute(int i)
+    {
+        data[i] = (byte)math.select(data[i], data[i] ^ data[i], data[i] > threshold);
+    }
+}
+
 [ComputeJobOptimization]
 public struct ThresholdExclusiveOrBurstJob : IJobParallelFor
 {

@@ -9,6 +9,7 @@ public enum ExampleEffect
     RightShiftThreshold,
     ComplementThreshold,
     ExclusiveOrThreshold,
+    ExclusiveOrSelf,
 }
 
 public class WebcamProcessing : MonoBehaviour
@@ -92,6 +93,12 @@ public class WebcamProcessing : MonoBehaviour
 
         switch (effect)
         {
+            case ExampleEffect.ExclusiveOrSelf:
+                if (lineSkip == 1)
+                    ExclusiveOrSelfProcessWithoutLineSkip(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                else
+                    SelfExclusiveOrProcessing(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
+                break;
             case ExampleEffect.ExclusiveOrThreshold:
                 if (lineSkip == 1)
                     ExclusiveOrProcessWithoutLineSkip(m_NativeRed, m_NativeGreen, m_NativeBlue, ref m_RGBComplementBurstJobHandle);
@@ -269,6 +276,41 @@ public class WebcamProcessing : MonoBehaviour
         handle = blueJob.Schedule(length, 1024, gHandle);
     }
 
+    void SelfExclusiveOrProcessing(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
+    {
+        var redJob = new SelfExclusiveOrBurstJob()
+        {
+            data = r,
+            threshold = m_ColorThreshold.r,
+            width = m_WebcamTextureSize.x,
+            height = m_WebcamTextureSize.y,
+            lineSkip = lineSkip
+        };
+
+        var greenJob = new SelfExclusiveOrBurstJob()
+        {
+            data = g,
+            threshold = m_ColorThreshold.g,
+            width = m_WebcamTextureSize.x,
+            height = m_WebcamTextureSize.y,
+            lineSkip = lineSkip
+        };
+
+        var blueJob = new SelfExclusiveOrBurstJob()
+        {
+            data = b,
+            threshold = m_ColorThreshold.b,
+            width = m_WebcamTextureSize.x,
+            height = m_WebcamTextureSize.y,
+            lineSkip = lineSkip
+        };
+
+        var length = m_NativeRed.Length;
+        var rHandle = redJob.Schedule(length, 1024);
+        var gHandle = greenJob.Schedule(length, 1024, rHandle);
+        handle = blueJob.Schedule(length, 1024, gHandle);
+    }
+
     void ExclusiveOrProcessWithoutLineSkip(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
     {
         var redJob = new ThresholdExclusiveOrNoSkipJob()
@@ -284,6 +326,32 @@ public class WebcamProcessing : MonoBehaviour
         };
 
         var blueJob = new ThresholdExclusiveOrNoSkipJob()
+        {
+            data = b,
+            threshold = m_ColorThreshold.b
+        };
+
+        var length = m_NativeRed.Length;
+        var rHandle = redJob.Schedule(length, 512);
+        var gHandle = greenJob.Schedule(length, 512, rHandle);
+        handle = blueJob.Schedule(length, 512, gHandle);
+    }
+
+    void ExclusiveOrSelfProcessWithoutLineSkip(NativeSlice<byte> r, NativeSlice<byte> g, NativeSlice<byte> b, ref JobHandle handle)
+    {
+        var redJob = new SelfExclusiveOrNoSkipJob()
+        {
+            data = r,
+            threshold = m_ColorThreshold.r
+        };
+
+        var greenJob = new SelfExclusiveOrNoSkipJob()
+        {
+            data = g,
+            threshold = m_ColorThreshold.g
+        };
+
+        var blueJob = new SelfExclusiveOrNoSkipJob()
         {
             data = b,
             threshold = m_ColorThreshold.b

@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using Unity.Jobs;
+﻿using Unity.Jobs;
 using Unity.Collections;
 using Unity.Mathematics;
+using Unity.Burst;
 
 
-[ComputeJobOptimization]
+[BurstCompile]
 public struct SelfComplementWithSkipJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -20,7 +20,7 @@ public struct SelfComplementWithSkipJob : IJobParallelFor
     }
 }
 
-[ComputeJobOptimization]
+[BurstCompile]
 public struct SelfComplementNoSkipJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -33,7 +33,7 @@ public struct SelfComplementNoSkipJob : IJobParallelFor
 }
 
 
-[ComputeJobOptimization]
+[BurstCompile]
 public struct SelfLeftShiftBurstJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -49,7 +49,7 @@ public struct SelfLeftShiftBurstJob : IJobParallelFor
     }
 }
 
-[ComputeJobOptimization]
+[BurstCompile]
 public struct LeftShiftNoSkipJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -61,7 +61,7 @@ public struct LeftShiftNoSkipJob : IJobParallelFor
     }
 }
 
-[ComputeJobOptimization]
+[BurstCompile]
 public struct ThresholdRightShiftBurstJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -77,7 +77,7 @@ public struct ThresholdRightShiftBurstJob : IJobParallelFor
     }
 }
 
-[ComputeJobOptimization]
+[BurstCompile]
 public struct RightShiftNoSkipJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -90,7 +90,7 @@ public struct RightShiftNoSkipJob : IJobParallelFor
 }
 
 
-[ComputeJobOptimization(Accuracy.Low, Support.Relaxed)]
+[BurstCompile]
 public struct SelfExclusiveOrBurstJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -106,7 +106,7 @@ public struct SelfExclusiveOrBurstJob : IJobParallelFor
     }
 }
 
-[ComputeJobOptimization(Accuracy.Low, Support.Relaxed)]
+[BurstCompile]
 public struct SelfExclusiveOrNoSkipJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -118,7 +118,7 @@ public struct SelfExclusiveOrNoSkipJob : IJobParallelFor
     }
 }
 
-[ComputeJobOptimization]
+[BurstCompile]
 public struct ThresholdExclusiveOrBurstJob : IJobParallelFor
 {
     public NativeSlice<byte> data;
@@ -134,7 +134,7 @@ public struct ThresholdExclusiveOrBurstJob : IJobParallelFor
     }
 }
 
-[ComputeJobOptimization]
+[BurstCompile]
 public struct ThresholdExclusiveOrNoSkipJob : IJobParallelFor
 {
     public NativeSlice<byte> data;

@@ -68,4 +68,9 @@ Demonstrates reducing an array of checks to a smaller list, and using temporaril
 Generates a cloud of 10000 points, then calculates magnitudes & normalizes the points.
 
 
+## Further Examples
+
+Keijiro Takahashi has a [great example of using the job system with ECS](https://github.com/keijiro/Voxelman)
+
+
 

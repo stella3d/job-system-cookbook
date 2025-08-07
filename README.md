@@ -1,15 +1,3 @@
-# Unity Technologies management should be ashamed of what they have done to all our work
-
-When I wrote this code, Unity was still a promising game engine, one I was proud to work for.
-
-Now that the shortsightedness of the c-suite there has flushed so much of our good work down the drain, it's hard to say that anyone should be excited about the engine, even though the C# job system remains an incredible accomplishment and developer experience.
-
-## John Riccitiello Can Suck My Dick And Balls
-
-fuck you 
-
-actual readme below
-
 C# Job System Cookbook
 =======================
 
